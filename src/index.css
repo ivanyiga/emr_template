@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html{
+    height: 100%;
+    overflow: hidden;
+    --tw-bg-opacity: 1;
+    background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+}
+body, #app{
+    height: 100%;
+    overflow: hidden;
+}
+
+.primary-bg{
+    background: rgba(55, 97, 152, 1);
+}
+.primary-bg-dark{
+    background: rgb(43, 77, 121);
+}
+.secondary-bg{
+    background: rgba(241, 100, 76, 1);
+}
+
+@layer components {
+    .btn-primary {
+        @apply primary-bg hover:bg-[#f1644c] text-white font-bold rounded-md focus:ring-[#f1644c] m-4;
+    }
+    .btn-secondary {
+        @apply secondary-bg hover:bg-[#c6503b] text-white font-bold rounded-md focus:ring-[#f1644c] m-4;
+    }
+    .btn-success {
+        @apply bg-green-500 hover:bg-green-600 text-white font-bold rounded-md focus:ring-green-900 m-4;
+    }
+    /*card*/
+    .tail-card {
+        background-color: theme(colors.white);
+        border-radius: theme(borderRadius.lg);
+        padding: theme(spacing.6);
+        box-shadow: theme(boxShadow.xl);
+    }
+    .primary-text{
+        color: rgba(55, 97, 152, 1);
+    }
+    .side-nav-btn-current{
+        @apply primary-bg-dark hover:bg-[#f1644c] text-white hover:text-white;
+    }
+    .side-nav-btn{
+        @apply primary-bg hover:bg-[#f1644c] text-white hover:text-white;
+    }
+    .open-menu-btn-mobile{
+        @apply focus:ring-[#f1644c]
+    }
+}
