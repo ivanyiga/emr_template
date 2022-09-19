@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto mt-8 px-8">
+  <div class="container mt-8 px-8">
     <h3 class="text-lg font-bold leading-6 text-gray-900 mt-8">DISPLAYING STATS</h3>
     <p class="text-[#626890] mb-8">Display Stats with comparison of the previous periods</p>
     <StatsComponent />
