@@ -7,52 +7,13 @@
           <img class="h-8 w-auto" src="./assets/whitelogo.svg" alt="Your Company" />
         </div>
         <div class="mt-6 w-full flex-1 space-y-1 px-2">
-          <a href="#" v-for="(item, index) in sidebarNavigation" :key="item.name" v-on:click="currentNavItem = index; menuOpen = true" :class="[currentNavItem === index ? 'side-nav-btn-current' : 'side-nav-btn', 'group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium']" :aria-current="item.current ? 'page' : undefined">
+          <a href="#" v-for="(item, index) in sidebarNavigation" :key="item.name" v-on:click="currentNavItem = index" :class="[currentNavItem === index ? 'side-nav-btn-current' : 'side-nav-btn', 'group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium']" :aria-current="item.current ? 'page' : undefined">
             <component :is="item.icon" :class="[item.current ? 'text-white' : 'text-grey-100 group-hover:text-white', 'h-6 w-6']" aria-hidden="true" />
             <span class="mt-2">{{ item.name }}</span>
           </a>
         </div>
       </div>
     </div>
-
-
-    <!-- Sub-menu -->
-    <TransitionRoot as="template" :show="menuOpen">
-      <Dialog as="div" class="relative z-20 hidden md:block" @close="menuOpen = false">
-        <TransitionChild as="template" enter="transition-opacity ease-linear duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="transition-opacity ease-linear duration-300" leave-from="opacity-100" leave-to="opacity-0">
-          <div class="fixed inset-0 bg-gray-600 bg-opacity-75" />
-        </TransitionChild>
-
-        <div class="fixed inset-0 z-40 flex">
-          <TransitionChild as="template" enter="transition ease-in-out duration-300 transform" enter-from="-translate-x-full" enter-to="translate-x-0" leave="transition ease-in-out duration-300 transform" leave-from="translate-x-0" leave-to="-translate-x-full">
-            <DialogPanel class="relative flex w-full max-w-xs flex-1 flex-col bg-white pt-5 pb-4">
-              <TransitionChild as="template" enter="ease-in-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in-out duration-300" leave-from="opacity-100" leave-to="opacity-0">
-                <div class="absolute top-1 right-0 -mr-14 p-1">
-                  <button type="button" class="flex h-12 w-12 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-white" @click="menuOpen = false">
-                    <XMarkIcon class="h-6 w-6 text-white" aria-hidden="true" />
-                    <span class="sr-only">Close sidebar</span>
-                  </button>
-                </div>
-              </TransitionChild>
-              <div class="flex flex-shrink-0 items-center px-4">
-                <h1>{{sidebarNavigation[currentNavItem].name}}</h1>
-              </div>
-              <div class="mt-5 flex flex-grow flex-col">
-                <nav class="flex-1 space-y-1 px-2 pb-4">
-                  <button v-for="(item, index) in sidebarNavigation[currentNavItem].sub" :key="item.name" v-on:click="menuOpen = false; currentSubNavItem = currentNavItem+'-'+index" :class="[currentSubNavItem === currentNavItem+'-'+index ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full']">
-                    <component :is="item.icon" :class="[item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']" aria-hidden="true" />
-                    {{ item.name }}
-                  </button>
-                </nav>
-              </div>
-            </DialogPanel>
-          </TransitionChild>
-          <div class="w-14 flex-shrink-0" aria-hidden="true">
-            <!-- Dummy element to force sidebar to shrink to fit close icon -->
-          </div>
-        </div>
-      </Dialog>
-    </TransitionRoot>
 
     <!-- Mobile menu -->
     <TransitionRoot as="template" :show="mobileMenuOpen">
@@ -94,12 +55,15 @@
       </Dialog>
     </TransitionRoot>
 
-
     <!-- Content area -->
     <div class="flex flex-1 flex-col overflow-hidden">
       <header class="w-full">
         <div class="relative z-10 flex h-16 flex-shrink-0 border-b border-gray-200 bg-white shadow-sm">
           <button type="button" class="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-transparent md:hidden" @click="mobileMenuOpen = true">
+            <span class="sr-only">Open sidebar</span>
+            <Bars3BottomLeftIcon class="h-6 w-6" aria-hidden="true" />
+          </button>
+          <button type="button" class="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-transparent hidden md:block" @click="openSubMenu = !openSubMenu">
             <span class="sr-only">Open sidebar</span>
             <Bars3BottomLeftIcon class="h-6 w-6" aria-hidden="true" />
           </button>
@@ -145,15 +109,30 @@
 
       <!-- Main content -->
       <div class="flex flex-1 items-stretch overflow-hidden">
+          <!-- Submenu content -->
 
+        <Transition name="slide-fade">
+        <aside v-if="openSubMenu" :class="['hidden w-72 overflow-y-auto border-l border-r border-gray-200 bg-white lg:block']">
+          <div class="mt-5 flex flex-grow flex-col">
+            <nav class="flex-1 space-y-1 px-2 pb-4">
+              <button v-for="(item, index) in sidebarNavigation[currentNavItem].sub" :key="item.name" v-on:click="currentSubNavItem = currentNavItem+'-'+index" :class="[currentSubNavItem === currentNavItem+'-'+index ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full']">
+                <component :is="item.icon" :class="[item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']" aria-hidden="true" />
+                {{ item.name }}
+              </button>
+            </nav>
+          </div>
+        </aside>
+        </Transition>
+
+        <Transition name="slide-fade">
         <main class="flex-1 overflow-y-auto">
           <!-- Primary column -->
           <section aria-labelledby="primary-heading" class="flex h-full min-w-0 flex-1 flex-col lg:order-last">
-            <!-- Main content Goes Here -->
+            <!-- Your content -->
             <router-view />
           </section>
         </main>
-
+        </Transition>
       </div>
     </div>
   </div>
@@ -178,8 +157,8 @@
     /*PhotoIcon,
     /!*PlusIcon,*!/
     RectangleStackIcon,
-    Squares2X2Icon,*/
-    UserGroupIcon,
+    Squares2X2Icon,
+    UserGroupIcon,*/
     XMarkIcon,
   } from '@heroicons/vue/24/outline'
   import { MagnifyingGlassIcon } from '@heroicons/vue/20/solid'
@@ -202,26 +181,13 @@
           current: false
         },
       ] },
-    { name: 'Account', href: '#', icon: UserGroupIcon, current: false, sub: [
-        {
-          name: 'Edit Account',
-          route: '/home',
-          icon: CogIcon,
-          current: false
-        },
-        {
-          name: 'View Account',
-          route: '/home',
-          icon: CogIcon,
-          current: false
-        },
-      ] },
   ]
   let userNavigation = [
     { name: 'Your Profile', href: '#' },
     { name: 'Sign out', href: '#' },
   ]
 
+  let openSubMenu = ref(false)
   let mobileMenuOpen = ref(false)
   onMounted(() => {
       document.documentElement.classList.add('h-full', 'bg-gray-50')
@@ -236,8 +202,6 @@
       console.log(`${i === index}`)
     }
   }*/
-
-  let menuOpen = ref(false)
 </script>
 <style>
 /*#app {
@@ -247,4 +211,19 @@
   text-align: center;
   color: #2c3e50;
 }*/
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+  width: 100%;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s ease-out;
+  width: 0;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(-20px);
+  opacity: 0;
+}
 </style>
