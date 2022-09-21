@@ -7,7 +7,7 @@
           <img class="h-8 w-auto" src="./assets/whitelogo.svg" alt="Your Company" />
         </div>
         <div class="mt-6 w-full flex-1 space-y-1 px-2">
-          <a href="#" v-for="(item, index) in sidebarNavigation" :key="item.name" v-on:click="currentNavItem = index" :class="[currentNavItem === index ? 'side-nav-btn-current' : 'side-nav-btn', 'group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium']" :aria-current="item.current ? 'page' : undefined">
+          <a href="#" v-for="(item, index) in sidebarNavigation" :key="item.name" v-on:click="currentNavItem = index; openSubMenu = true" :class="[currentNavItem === index ? 'side-nav-btn-current' : 'side-nav-btn', 'group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium']" :aria-current="item.current ? 'page' : undefined">
             <component :is="item.icon" :class="[item.current ? 'text-white' : 'text-grey-100 group-hover:text-white', 'h-6 w-6']" aria-hidden="true" />
             <span class="mt-2">{{ item.name }}</span>
           </a>
