@@ -111,18 +111,20 @@
       <div class="flex flex-1 items-stretch overflow-hidden">
           <!-- Submenu content -->
 
-        <Transition name="slide-fade">
-        <aside v-if="openSubMenu" :class="['hidden w-72 overflow-y-auto border-l border-r border-gray-200 bg-white lg:block']">
+
+        <aside id="side-sub-nav" :class="[openSubMenu?'w-72':'w-0','hidden overflow-y-auto border-l border-r border-gray-200 bg-white lg:block']">
           <div class="mt-5 flex flex-grow flex-col">
-            <nav class="flex-1 space-y-1 px-2 pb-4">
+            <Transition name="slide-fade">
+            <nav v-if="openSubMenu" class="flex-1 space-y-1 px-2 pb-4">
               <button v-for="(item, index) in sidebarNavigation[currentNavItem].sub" :key="item.name" v-on:click="currentSubNavItem = currentNavItem+'-'+index" :class="[currentSubNavItem === currentNavItem+'-'+index ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full']">
                 <component :is="item.icon" :class="[item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']" aria-hidden="true" />
                 {{ item.name }}
               </button>
             </nav>
+            </Transition>
           </div>
         </aside>
-        </Transition>
+
 
         <Transition name="slide-fade">
         <main class="flex-1 overflow-y-auto">
@@ -213,12 +215,11 @@
 }*/
 .slide-fade-enter-active {
   transition: all 0.3s ease-out;
-  width: 100%;
+  transition-delay: 0.3s;
 }
 
 .slide-fade-leave-active {
-  transition: all 0.3s ease-out;
-  width: 0;
+  transition: all 0.0s ease-out;
 }
 
 .slide-fade-enter-from,
@@ -226,4 +227,10 @@
   transform: translateX(-20px);
   opacity: 0;
 }
+  #side-sub-nav{
+    transition-property: width;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+    transition-delay: 0s;
+  }
 </style>
