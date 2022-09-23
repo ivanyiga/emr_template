@@ -183,6 +183,20 @@
           current: false
         },
       ] },
+    { name: 'Home', href: '#', icon: HomeIcon, current: false, sub: [
+        {
+          name: 'Submenu Item for Home2',
+          route: '/home',
+          icon: CogIcon,
+          current: false
+        },
+        {
+          name: 'Submenu Item for Home22',
+          route: '/home',
+          icon: CogIcon,
+          current: false
+        },
+      ] },
   ]
   let userNavigation = [
     { name: 'Your Profile', href: '#' },
